@@ -80,8 +80,8 @@ nginx-admin/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/nginx-admin.git
-cd nginx-admin
+git clone https://github.com/crunux/nginx-docker-admin.git
+cd nginx-docker-admin
 ```
 
 ### 2. Configurar el entorno
@@ -95,7 +95,7 @@ Editar `.env`:
 ```bash
 # Auth
 ADMIN_USER=admin
-ADMIN_HASH="$2b$10$..."   # ver paso 3
+ADMIN_PASSWORD="cambiaresto"   # ver paso 3
 JWT_SECRET=               # ver paso 3
 
 # Rutas
