@@ -1,0 +1,1 @@
+export { default } from "file:///Users/crunux/Documents/Development/Vue/nginx-admin-nuxt/frontend/node_modules/@nuxt/vite-builder/dist/vite-node-entry.mjs"
