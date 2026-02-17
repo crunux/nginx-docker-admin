@@ -1,4 +1,4 @@
-import { $} from 'bun'
+import { OS, Platform, type PlatformKey } from '../config/os';
 
 
 const PROJECTS_DIR = process.env.PROJECTS_DIR || '/var/www'
@@ -6,20 +6,12 @@ const PROJECTS_DIR = process.env.PROJECTS_DIR || '/var/www'
 // Guarda los procesos activos por cliente
 // const activeStreams = new Map<string, ReturnType<typeof Bun.spawn>>()
 
-const OS = (await $`uname -s`.text()).trim()
-
-const Platform = {
-  linux: 'Linux',
-  Darwin: 'MacOS',
-  win32: 'Windows'
-} as const
-
 const CommandPlatform = {
   linux: ['journalctl', '-f', '-n', '50'],
   Darwin: ['log', 'stream'],
   win32: ['Get-WinEvent', '-LogName', 'System', '-MaxEvents', '50']
 }
-type PlatformKey = keyof typeof Platform
+
 
 console.log(Platform[OS as PlatformKey] || "Unknown Platform");
 

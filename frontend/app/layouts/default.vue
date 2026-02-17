@@ -5,6 +5,12 @@
 
 	const menuItems = computed<NavigationMenuItem[]>(() => [
 		{
+			label: 'Home',
+			icon: 'i-heroicons-home',
+			to: '/dashboard',
+			active: route.path.startsWith('/dashboard') && !route.path.startsWith('/dashboard/sites') && !route.path.startsWith('/dashboard/subdomains') && !route.path.startsWith('/dashboard/docker') && !route.path.startsWith('/dashboard/logs') && !route.path.startsWith('/dashboard/config')
+		},
+		{
 			label: 'Sites',
 			icon: 'i-heroicons-globe-alt',
 			to: '/dashboard/sites',
@@ -28,6 +34,12 @@
 			to: '/dashboard/logs',
 			active: route.path.startsWith('/dashboard/logs')
 		},
+		{
+			label: 'Settings',
+			icon: 'i-heroicons-cog-6-tooth',
+			to: '/dashboard/config',
+			active: route.path.startsWith('/dashboard/config')
+		},
 		// {
 		// 	label: 'github',
 		// 	icon: 'i-simple-icons-github',
@@ -40,7 +52,7 @@
 <template>
 	<UHeader mode="slideover"
 		class="w-full"
-		title="Ngnix Manager">
+		title="Ngnix-Docker Manager">
 		<UNavigationMenu :items="menuItems" />
 		<template #right>
 

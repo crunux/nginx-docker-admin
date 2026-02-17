@@ -12,7 +12,7 @@ const activeProcs = new Map<string, ReturnType<typeof Bun.spawn>>()
 const activeReaders = new Map<string, boolean>() // controla si el loop sigue vivo
 const activeTimers  = new Map<string, ReturnType<typeof setInterval>>() // ← para stats
 
-type LogHandler =  keyof typeof logHandlers
+type LogHandler =  'nginx' | 'certbot' | 'system'
 
 export function createWsServer() {
   Bun.serve<WsData>({
