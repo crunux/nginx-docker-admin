@@ -31,6 +31,11 @@ module.exports = {
         'ui',         // Frontend general
         'api',        // Backend general
         'deps',       // Dependencias
+        'build',      // Configuración de build
+        'ci',         // Configuración CI/CD
+        'docs',       // Documentación
+        'config',     // Configuración general
+        'tools',      // Herramientas de sistema server
       ],
     ],
     'subject-case': [0],  // No forzar case
