@@ -11,7 +11,8 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f",
-		"prepare": "husky"
+		"prepare": "husky",
+		"test": "echo \"No tests yet\" && exit 0"
   },
   "repository": {
     "type": "git",
