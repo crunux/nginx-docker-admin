@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken'
 import { logHandlers } from './logServer'
 import { $, type ServerWebSocket } from 'bun'
 import si from 'systeminformation'
+import { jwtVerify } from '../utils/auth'
 
 interface WsData {
   clientId: string
@@ -22,15 +22,22 @@ export function createWsServer() {
       const url      = new URL(req.url)
       const token    = url.searchParams.get('token')
       const clientId = crypto.randomUUID()
+      let authenticated = false
 
-      try {
-        jwt.verify(token || '', process.env.JWT_SECRET || 'secret')
-      } catch {
-        return new Response('Unauthorized', { status: 401 })
+      if (!token) {
+        return new Response('Not Token Set', { status: 401 })
       }
 
+      const validToken = jwtVerify(token)
+      
+      if (validToken){
+        // return new Response('Unauthorized', { status: 401 })
+        authenticated = true
+      }
+      
+
       const upgraded = server.upgrade(req, {
-        data: { clientId, authenticated: true },
+        data: { clientId, authenticated },
       })
 
       return upgraded
@@ -40,6 +47,18 @@ export function createWsServer() {
 
     websocket: {
       open(ws: ServerWebSocket<WsData>) {
+
+        if (!ws.data.authenticated) {
+        // Notificar antes de cerrar para que el cliente sepa el motivo
+          ws.send(JSON.stringify({
+            type:    'error',
+            code:    'TOKEN_EXPIRED',
+            message: 'Tu sesión ha expirado',
+          }))
+          ws.close(1008, 'Token expired')
+          return
+        }
+
         ws.send(JSON.stringify({
           type: 'connected',
           message: '🟢 Conectado al servidor de logs',

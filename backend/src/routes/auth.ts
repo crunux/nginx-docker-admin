@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import jwt from 'jsonwebtoken'
 import { authService } from '../services/auth.service'
-import { ADMIN_DB, PASSWORD_DB } from '../config/auth'
+import { ADMIN_DB, JWT_SECRET, PASSWORD_DB } from '../config/auth'
+import { generateJWT } from '../utils/auth'
 
 const router = Router()
 
@@ -25,11 +26,7 @@ router.post('/login', async (req, res) => {
 
   if (!valid) return res.status(401).json({ error: 'Credenciales inválidas' })
 
-  const token = jwt.sign(
-    { username },
-    process.env.JWT_SECRET || 'secret',
-    { expiresIn: '8h' }
-  )
+  const token = generateJWT(username)
 
   res.json({ token })
 })

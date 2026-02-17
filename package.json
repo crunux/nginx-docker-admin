@@ -1,0 +1,39 @@
+{
+	"name": "nginx-admin",
+  "version": "0.0.0-development",
+  "description": "Panel de administración web para gestionar servidores Nginx",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && bun --watch src/index.ts",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && bun install",
+    "build:frontend": "cd frontend && npm run build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+		"prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crunux/nginx-admin.git"
+  },
+  "keywords": [
+    "nginx",
+    "admin",
+    "docker",
+    "ssl",
+    "certbot",
+    "nuxt",
+    "bun"
+  ],
+	"author": "crunux",
+  "license": "MIT",
+	"devDependencies": {
+		"husky": "^9.1.7",
+		"@commitlint/cli": "^20.4.1",
+		"@commitlint/config-conventional": "^20.4.1",
+		"@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "semantic-release": "^23.0.0"
+	}
+}

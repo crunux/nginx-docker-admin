@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
 
+
 export const authService = {
+
   async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
     // return Bun.password.hash(password,{
@@ -13,4 +15,5 @@ export const authService = {
     return bcrypt.compare(password, hash);
     // return Bun.password.verify(password, hash, 'bcrypt')
   },
+
 }
