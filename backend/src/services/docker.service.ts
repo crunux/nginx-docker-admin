@@ -24,7 +24,6 @@ export const dockerService = {
     try {
       // Usamos \x00 (null byte) como separador seguro
       const format = `{{.ID}}${SEP}{{.Names}}${SEP}{{.Image}}${SEP}{{.Status}}${SEP}{{.State}}${SEP}{{.Ports}}${SEP}{{.CreatedAt}}`
-      // const format = "{{.ID}}|{{.Names}}|{{.Image}}|{{.Status}}|{{.State}}|{{.Ports}}"
 
       const out = await $`docker ps -a --format ${format}`.nothrow().text()
 
@@ -58,8 +57,7 @@ export const dockerService = {
   async getStats(): Promise<any[]> {
     try {
       const format = `{{.ID}}${SEP}{{.Name}}${SEP}{{.CPUPerc}}${SEP}{{.MemUsage}}${SEP}{{.MemPerc}}${SEP}{{.NetIO}}${SEP}{{.BlockIO}}`
-
-      // const format = "{{.ID}}|{{.Name}}|{{.CPUPerc}}|{{.MemUsage}}|{{.MemPerc}}|{{.NetIO}}|{{.BlockIO}}"
+      
       const out    = await $`docker stats --no-stream --format ${format}`.nothrow().text()
 
       if (!out.trim()) return []
