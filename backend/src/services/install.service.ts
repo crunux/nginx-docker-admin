@@ -1,6 +1,6 @@
 import { $ } from 'bun'
 import si from 'systeminformation'
-import { getInstallCommand, isCertbotInstalled, isDockerComposeInstalled, isDockerInstalled, isNginxInstalled } from '../utils/packageManager'
+import { getInstallCommand, isCertbotInstalled, isDockerComposeInstalled, isDockerInstalled, isNginxInstalled } from '../utils/package-manager'
 import { AppError } from '../utils/errors'
 import { mapSystemError } from '../utils/errors'
 

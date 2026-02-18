@@ -22,18 +22,24 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: false  # ← no instalar automáticamente
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+
+      - name: Debug - Check files
+        run: |
+          pwd
+          ls -la
+          ls -la frontend/
+          cat frontend/package.json | head -20
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --no-workspace-root
 
       - name: Lint
         working-directory: ./frontend

@@ -1,117 +1,130 @@
 <script setup lang="ts">
-	import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn } from '@nuxt/ui'
 
-	const { get, post, put, delete: del } = useApi()
+const { get, post, put, delete: del } = useApi()
 
-	type Sites = {
-		name: string;
-		config: string;
-		enabled: boolean;
-	}
+type Sites = {
+	name: string
+	config: string
+	enabled: boolean
+}
 
+const sites = ref<Sites[]>([])
+const openCreate = ref(false)
+const openSsl = ref(false)
+const editMode = ref(false)
+const saving = ref(false)
+const issuing = ref(false)
+const sslDomain = ref('')
+const sslEmail = ref('')
+const siteForm = reactive({ name: '', domain: '', port: 3000, config: '' })
 
-	const sites = ref<Sites[]>([])
-	const openCreate = ref(false)
-	const openSsl = ref(false)
-	const editMode = ref(false)
-	const saving = ref(false)
-	const issuing = ref(false)
-	const sslDomain = ref('')
-	const sslEmail = ref('')
-	const siteForm = reactive({ name: '', domain: '', port: 3000, config: '' })
+const columns: TableColumn<Sites>[] = [
+	{ accessorKey: 'name', header: 'Nombre' },
+	{ accessorKey: 'enabled', header: 'Activo' },
+	{ id: 'actions', header: 'Acciones' }
+]
 
+async function loadSites() {
+	sites.value = await get<Sites[]>('/api/sites')
+}
 
-	const columns: TableColumn<Sites>[] = [
-		{ accessorKey: 'name', header: 'Nombre' },
-		{ accessorKey: 'enabled', header: 'Activo' },
-		{ id: 'actions', header: 'Acciones' },
-	]
+async function toggleSite(site: Sites) {
+	if (site.enabled) await post(`/api/sites/${site.name}/disable`, {})
+	else await post(`/api/sites/${site.name}/enable`, {})
+	await loadSites()
+}
 
-	async function loadSites() {
-		sites.value = await get<any[]>('/api/sites')
-	}
+function editSite(site: Sites) {
+	Object.assign(siteForm, { name: site.name, config: site.config })
+	editMode.value = true
+	openCreate.value = true
+}
 
-	async function toggleSite(site: any) {
-		if (site.enabled) await post(`/api/sites/${site.name}/disable`, {})
-		else await post(`/api/sites/${site.name}/enable`, {})
-		await loadSites()
-	}
-
-	function editSite(site: any) {
-		Object.assign(siteForm, { name: site.name, config: site.config })
-		editMode.value = true
-		openCreate.value = true
-	}
-
-	async function saveSite() {
-		saving.value = true
-		try {
-			if (editMode.value) {
-				await put(`/api/sites/${siteForm.name}`, { config: siteForm.config })
-			} else {
-				await post('/api/sites', siteForm)
-			}
-			openCreate.value = false
-			await loadSites()
-		} finally {
-			saving.value = false
+async function saveSite() {
+	saving.value = true
+	try {
+		if (editMode.value) {
+			await put(`/api/sites/${siteForm.name}`, { config: siteForm.config })
+		} else {
+			await post('/api/sites', siteForm)
 		}
-	}
-
-	async function deleteSite(name: string) {
-		if (!confirm(`¿Eliminar ${name}?`)) return
-		await del(`/api/sites/${name}`)
+		openCreate.value = false
 		await loadSites()
+	} finally {
+		saving.value = false
 	}
+}
 
-	async function issueSsl() {
-		issuing.value = true
-		try {
-			const res = await post<{ result: string }>('/api/ssl/issue', {
-				domain: sslDomain.value,
-				email: sslEmail.value,
-			})
-			alert(res.result)
-			openSsl.value = false
-		} finally {
-			issuing.value = false
-		}
+async function deleteSite(name: string) {
+	if (!confirm(`¿Eliminar ${name}?`)) return
+	await del(`/api/sites/${name}`)
+	await loadSites()
+}
+
+async function issueSsl() {
+	issuing.value = true
+	try {
+		const res = await post<{ result: string }>('/api/ssl/issue', {
+			domain: sslDomain.value,
+			email: sslEmail.value
+		})
+		alert(res.result)
+		openSsl.value = false
+	} finally {
+		issuing.value = false
 	}
+}
 
-	onMounted(loadSites)
+onMounted(loadSites)
 </script>
+
 <template>
 	<div class="p-6 space-y-6">
 		<div class="flex justify-between items-center">
-			<h2 class="text-2xl font-bold">Sitios Nginx</h2>
+			<h2 class="text-2xl font-bold">
+				Sitios Nginx
+			</h2>
 			<div class="flex justify-center items-center gap-1">
-				<UButton icon="i-heroicons-plus"
-					@click="openCreate = true">
+				<UButton
+					icon="i-heroicons-plus"
+					@click="openCreate = true"
+				>
 					Nuevo sitio
 				</UButton>
 			</div>
 		</div>
 
-		<UTable :rows="sites"
+		<UTable
+			:rows="sites"
 			:columns="columns"
-			i>
+			i
+		>
 			<template #enabled-data="{ row }">
-				<UToggle :model-value="row.getValue('enabled')"
-					@update:model-value="toggleSite(row)" />
+				<UToggle
+					:model-value="row.getValue('enabled')"
+					@update:model-value="toggleSite(row as unknown as Sites)"
+				/>
 			</template>
 			<template #actions-data="{ row }">
 				<div class="flex gap-2">
-					<UButton size="xs"
+					<UButton
+						size="xs"
 						icon="i-heroicons-pencil"
-						@click="editSite(row)" />
-					<UButton size="xs"
+						@click="editSite(row as unknown as Sites)"
+					/>
+					<UButton
+						size="xs"
 						icon="i-heroicons-shield-check"
 						color="success"
-						@click="sslDomain = row.getValue('name'); openSsl = true" />
-					<UButton size="xs"
+						@click="sslDomain = row.getValue('name'); openSsl = true"
+					/>
+					<UButton
+						size="xs"
 						icon="i-heroicons-trash"
 						color="error"
-						@click="deleteSite(row.getValue('name'))" />
+						@click="deleteSite(row.getValue('name'))"
+					/>
 				</div>
 			</template>
 		</UTable>
@@ -120,36 +133,50 @@
 		<UModal v-model:open="openCreate">
 			<template #content>
 				<UCard>
-					<template #header>{{ editMode ? 'Editar' : 'Nuevo' }} sitio</template>
+					<template #header>
+						{{ editMode ? 'Editar' : 'Nuevo' }} sitio
+					</template>
 					<div class="space-y-4 flex flex-col gap-2">
 						<UFormField label="Dominio">
-							<UInput :ui="{ root: 'w-full' }"
+							<UInput
 								v-model="siteForm.domain"
-								placeholder="ejemplo.com" />
+								:ui="{ root: 'w-full' }"
+								placeholder="ejemplo.com"
+							/>
 						</UFormField>
 						<div class="w-full flex flex-col md:flex-row gap-4">
 							<UFormField label="Nombre">
-								<UInput :ui="{ root: 'w-full' }"
+								<UInput
 									v-model="siteForm.name"
-									:disabled="editMode" />
+									:ui="{ root: 'w-full' }"
+									:disabled="editMode"
+								/>
 							</UFormField>
 							<UFormField label="Puerto app">
-								<UInput :ui="{ root: 'w-full' }"
+								<UInput
 									v-model.number="siteForm.port"
+									:ui="{ root: 'w-full' }"
 									type="number"
-									placeholder="3000" />
+									placeholder="3000"
+								/>
 							</UFormField>
 						</div>
 						<UFormField label="Config manual (opcional)">
-							<UTextarea :ui="{ root: 'w-full' }"
+							<UTextarea
 								v-model="siteForm.config"
+								:ui="{ root: 'w-full' }"
 								:rows="10"
-								class="font-mono text-sm" />
+								class="font-mono text-sm"
+							/>
 						</UFormField>
 					</div>
 					<template #footer>
-						<UButton @click="saveSite"
-							:loading="saving">Guardar</UButton>
+						<UButton
+							:loading="saving"
+							@click="saveSite"
+						>
+							Guardar
+						</UButton>
 					</template>
 				</UCard>
 			</template>
@@ -159,15 +186,21 @@
 		<UModal v-model:open="openSsl">
 			<template #content>
 				<UCard>
-					<template #header>Emitir SSL — {{ sslDomain }}</template>
+					<template #header>
+						Emitir SSL — {{ sslDomain }}
+					</template>
 					<UFormField label="Email para Let's Encrypt">
-						<UInput v-model="sslEmail"
-							type="email" />
+						<UInput
+							v-model="sslEmail"
+							type="email"
+						/>
 					</UFormField>
 					<template #footer>
-						<UButton @click="issueSsl"
+						<UButton
 							:loading="issuing"
-							color="success">
+							color="success"
+							@click="issueSsl"
+						>
 							Emitir certificado
 						</UButton>
 					</template>
