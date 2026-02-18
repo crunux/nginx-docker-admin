@@ -14,10 +14,6 @@ jobs:
     name: Frontend Tests
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ./frontend
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,24 +22,29 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+          run_install: false  # ← no instalar automáticamente
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          # cache-dependency-path: frontend/pnpm-lock.yaml
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: pnpm install --frozen-lockfile
 
       - name: Lint
+        working-directory: ./frontend
         run: pnpm run lint
 
       - name: Typecheck
+        working-directory: ./frontend
         run: pnpm exec nuxi typecheck
 
       - name: Build
+        working-directory: ./frontend
         run: pnpm run build
         env:
           NUXT_PUBLIC_API_URL: http://localhost:4000
@@ -52,10 +53,6 @@ jobs:
   backend:
     name: Backend Tests
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./backend
     
     steps:
       - name: Checkout
@@ -67,12 +64,15 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
+        working-directory: ./backend
         run: bun install
 
       - name: Typecheck
+        working-directory: ./backend
         run: bun run typecheck || echo "⚠️ No typecheck script, skipping"
 
       - name: Run tests
+        working-directory: ./backend
         run: bun test || echo "⚠️ No tests found, skipping"
 
   summary:
