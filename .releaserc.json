@@ -28,6 +28,5 @@
     ],
     "@semantic-release/github"
   ],
-  "verifyConditions": [],
-  "ci": false
+  "verifyConditions": []
 }
