@@ -1,10 +1,10 @@
-# 🛡️ Nginx Docker Admin
+# 🛡️ SiteCore
 
 Panel de administración web **self-hosted** para gestionar servidores Nginx, Docker, System Info desde el navegador. Construido con Nuxt 3, Express, Bun, elimina la necesidad de acceder al servidor por SSH para tareas rutinarias de configuración.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
 ![Bun](https://img.shields.io/badge/bun-1.x-orange)
-![Nuxt](https://img.shields.io/badge/nuxt-3.x-green)
+![Nuxt](https://img.shields.io/badge/nuxt-4.3.2-green)
 ![License](https://img.shields.io/badge/license-MIT-purple)
 
 ---
@@ -17,56 +17,75 @@ Panel de administración web **self-hosted** para gestionar servidores Nginx, Do
 - **Docker** — Gestión de proyectos, contenedores, imágenes y estadísticas en tiempo real
 - **Logs en tiempo real** — WebSockets para seguir Nginx, Docker, SSL y sistema en vivo
 - **Monitor del sistema** — CPU, RAM, disco y red actualizados en tiempo real
+- **Instalación de paquetes** — Nginx, Docker, Docker-Compose, Certbot.
 - **Autenticación** — Login seguro con JWT y bcrypt
+- **Configuracion Path de archivos** — Actualizar rutas de proyectos, certificados y configuraciones desde el panel.
 
 ---
 
 ## 🧱 Stack
 
-| Capa      | Tecnología                        |
-|-----------|-----------------------------------|
-| Frontend  | Nuxt 3 + Nuxt UI + Tailwind CSS   |
-| Backend   | Bun + Express                     |
-| Auth      | JWT + bcrypt                      |
-| Tiempo real | WebSockets (Bun nativo)         |
-| Sistema   | systeminformation                 |
-| SSL       | Certbot / Let's Encrypt           |
-| Deploy    | Docker + Docker Compose           |
+| Capa        | Tecnología                        |
+|-------------|-----------------------------------|
+| Frontend    | Nuxt 3 + Nuxt UI + Tailwind CSS   |
+| Backend     | Bun + Express                     |
+| Auth        | JWT + bcrypt                      |
+| Tiempo real | WebSockets (Bun nativo)           |
+| Sistema     | systeminformation                 |
+| SSL         | Certbot / Let's Encrypt           |
+| Instalacion | Nginx, Docker, Certbot            |
+| Deploy      | Docker + Docker Compose           |
 
 ---
 
 ## 📁 Estructura
 
 ```
-nginx-admin/
-├── frontend/                  # Nuxt 3
-│   ├── pages/
-│   │   └── dashboard/
-│   │       ├── index.vue      # Monitor del sistema
-│   │       ├── sites.vue      # Gestión de sitios
-│   │       ├── subdomains.vue # Gestión de subdominios
-│   │       ├── docker.vue     # Dashboard Docker
-│   │       └── logs.vue       # Logs en tiempo real
-│   ├── composables/
-│   │   ├── useLogStream.ts    # WebSocket singleton
-│   │   └── useApi.ts          # Cliente HTTP
-│   └── types/
+site-core/
+├── .github/                   # GitHub Actions
+│   └── workflows/             # CI/CD pipelines
+├── .husky/                    # Git hooks
+├── frontend/                  # Nuxt 4 + Nuxt UI
+│   |-- app/
+│   |    ├── pages/
+│   |    |    └── dashboard/
+│   |    |    |   ├── index.vue      # Monitor del sistema
+│   |    |    |   ├── sites.vue      # Gestión de sitios
+│   |    |    |   ├── subdomains.vue # Gestión de subdominios
+│   |    |    |   ├── docker.vue     # Dashboard Docker
+│   |    |    |   ├── config.vue     # Configuración del sistema
+|   |    |    |   └── logs.vue       # Logs en tiempo real
+│   |    |    ├── index.vue          # Pagina Principal
+|   |    |    └── login.vue          # Login
+|   |    ├── components              # Componentes reutilizables
+|   |    ├── composables/            # Composables de Vue (useAuth, useApi, etc)
+|   |    ├── layouts/                # Layout principal del panel
+|   |    |── types/                  # Tipos TypeScript
+|   |    ├── utils/                  # Funciones de utilidad
+|   |    |── stores/                 # Configuración de rutas, endpoints, etc
+|   |    |── assets/                 # Assets estáticos como imágenes, css, etc
+|   |    |── middleware/             # Protección de rutas, redirecciones, etc
+|   |    └── app.vue/                # Componente raíz
+|   |-- test/                  # Tests unitarios y de integración(vitest)
+|   |-- tests/                 # Tests end-to-end (playwright)  
+|   └─- public/                # Archivos estáticos
 ├── backend/                   # Bun + Express
 │   └── src/
 │       ├── routes/            # auth, sites, ssl, subdomains, docker, system
 │       ├── services/          # nginx, ssl, docker, system, auth
 │       ├── websocket/         # server.ts, logServer.ts
 │       ├── middleware/        # auth, errorHandler
-│       └── utils/             # errors.ts
-├── docker-compose.yml
-└── .env
+│       ├── utils/             # errors.ts
+│       └── config/            # auth, os.ts
+├── docker-compose.yml       # Configuración de Docker Compose
+└── .env.example               # Ejemplo de variables de entorno
 ```
 
 ---
 
 ## ⚙️ Requisitos
 
-- **Servidor:** Ubuntu / Debian con Nginx instalado
+- **Servidor:** Ubuntu / Debian con Nginx instalado, o instalación automática mediante el panel (soporta instalación de Nginx, Docker y Certbot) nota: crear un usuario con permisos limitados para ejecutar el panel (ej: `nginxadmin`) y otorgarle permisos sudo solo para `nginx` y `certbot`.
 - **Nginx:** `/etc/nginx/sites-available` y `/etc/nginx/sites-enabled`
 - **Certbot:** Para emisión automática de SSL
 - **Docker:** Para gestión de contenedores
@@ -216,6 +235,21 @@ services:
 | GET | `/api/system/disk` | Uso de disco |
 | GET | `/api/system/network` | Estadísticas de red |
 
+### Configuración
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/config/` | Obtener configuración actual |
+| PUT | `/api/config/` | Actualizar configuración (paths, etc) |
+| POST | `/api/config/reset` | Resetear configuración a valores por defecto |
+| GET | `/api/config/dependencies` | Obtener dependencias instaladas |
+| POST | `/api/config/install/:tool` | instalar dependencia (nginx, docker, etc) |
+
+## Instalación de dependencias
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| POST | `/api/install/:tool` | Instalar herramienta (nginx, docker, certbot) |
+| GET | `/api/install/check` | Verificar si una herramientas están instaladas |
+
 ---
 
 ## 🔁 WebSocket
@@ -302,4 +336,19 @@ npm run dev
 
 ## 📄 Licencia
 
+/**
+ * MIT License
+ * 
+ * Copyright (c) 2026 Crunux (https://crunux.me)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ */
 MIT © 2025 [Crunux](https://crunux.me)

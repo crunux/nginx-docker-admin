@@ -57,9 +57,9 @@ onMounted(load)
 		<!-- Header -->
 		<div class="flex flex-col md:flex-row items-center justify-between">
 			<div>
-				<h2 class="text-2xl font-bold">
+				<!-- <h2 class="text-2xl font-bold">
 					Configuración
-				</h2>
+				</h2> -->
 				<p class="text-sm text-muted mt-1">
 					Ajustes generales del panel
 				</p>

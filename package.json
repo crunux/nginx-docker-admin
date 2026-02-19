@@ -1,5 +1,5 @@
 {
-	"name": "site-core",
+  "name": "site-core",
   "version": "0.0.0-development",
   "description": "Panel de administración web para gestionar servidores Nginx",
   "private": true,
@@ -11,8 +11,8 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f",
-		"prepare": "husky",
-		"test": "echo \"No tests yet\" && exit 0"
+    "prepare": "husky",
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -27,14 +27,17 @@
     "nuxt",
     "bun"
   ],
-	"author": "crunux",
+  "author": "crunux",
   "license": "MIT",
-	"devDependencies": {
-		"husky": "^9.1.7",
-		"@commitlint/cli": "^20.4.1",
-		"@commitlint/config-conventional": "^20.4.1",
-		"@semantic-release/changelog": "^6.0.3",
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "husky": "^9.1.7",
     "semantic-release": "^23.0.0"
-	}
+  }
 }

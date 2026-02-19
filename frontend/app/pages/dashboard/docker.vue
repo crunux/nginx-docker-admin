@@ -228,9 +228,9 @@ onUnmounted(() => clearInterval(interval))
 		<!-- Header -->
 		<div class="flex items-center justify-between">
 			<div>
-				<h2 class="text-2xl font-bold">
+				<!-- <h2 class="text-2xl font-bold">
 					Docker
-				</h2>
+				</h2> -->
 				<p class="text-sm text-gray-500 mt-1">
 					{{ runningCount }} corriendo · {{ containers.length }} total
 				</p>

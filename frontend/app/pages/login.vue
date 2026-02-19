@@ -5,6 +5,10 @@ const auth = useAuthStore()
 const loading = ref(false)
 const form = reactive({ username: '', password: '' })
 
+// function enableCustomLayout() {
+// 	setPageLayout('home')
+// }
+
 async function handleLogin() {
 	loading.value = true
 	try {
@@ -49,6 +53,13 @@ async function handleLogin() {
 				>
 					Entrar
 				</UButton>
+				<!-- <UButton
+					type="button"
+					:loading="loading"
+					@click="enableCustomLayout"
+				>
+					Mostrar Bar
+				</UButton> -->
 			</UForm>
 		</UCard>
 	</div>

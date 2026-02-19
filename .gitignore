@@ -8,6 +8,7 @@ frontend/.nuxt
 frontend/.nitro
 frontend/.cache
 frontend/dist
+frontend/Headline.md
 
 # Node dependencies
 frontend/node_modules

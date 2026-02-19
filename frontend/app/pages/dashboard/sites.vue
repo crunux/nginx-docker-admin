@@ -82,9 +82,9 @@ onMounted(loadSites)
 <template>
 	<div class="p-6 space-y-6">
 		<div class="flex justify-between items-center">
-			<h2 class="text-2xl font-bold">
+			<!-- <h2 class="text-2xl font-bold">
 				Sitios Nginx
-			</h2>
+			</h2> -->
 			<div class="flex justify-center items-center gap-1">
 				<UButton
 					icon="i-heroicons-plus"
