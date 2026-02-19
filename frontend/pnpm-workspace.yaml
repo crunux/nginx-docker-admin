@@ -4,3 +4,8 @@ ignoredBuiltDependencies:
   - esbuild
   - unrs-resolver
   - vue-demi
+
+packages:
+  - '.'
+  - 'packages/*'
+  - 'frontend'

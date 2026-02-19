@@ -8,6 +8,7 @@ import {
   SiteAlreadyExistsError,
   NginxNotInstalledError,
 } from '../utils/errors'
+import { OSPlatform } from '../config/os'
 
 const SITES_AVAILABLE = '/etc/nginx/sites-available'
 const SITES_ENABLED   = '/etc/nginx/sites-enabled'
@@ -100,6 +101,18 @@ export const nginxService = {
       return await $`nginx -t 2>&1`.nothrow().text()
     } catch {
       throw new NginxNotInstalledError()
+    }
+  },
+
+  async getSiteConfig(name: string) {
+    try {
+      const filePath = path.join(SITES_AVAILABLE, name)
+      const exists = await Bun.file(filePath).exists()
+      if (!exists) throw new SiteNotFoundError(name)
+
+      return await Bun.file(filePath).text()
+    } catch (err) {
+      throw mapSystemError(err, name)
     }
   },
 }

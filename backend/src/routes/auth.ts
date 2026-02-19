@@ -1,7 +1,6 @@
 import { Router } from 'express'
-import jwt from 'jsonwebtoken'
 import { authService } from '../services/auth.service'
-import { ADMIN_DB, JWT_SECRET, PASSWORD_DB } from '../config/auth'
+import { ADMIN_DB, PASSWORD_DB } from '../config/auth'
 import { generateJWT } from '../utils/auth'
 
 const router = Router()
@@ -17,7 +16,6 @@ router.post('/login', async (req, res) => {
   // const passwordDB = process.env.ADMIN_HASH || '$2b$10$vbT56furRMWD2mVhvKh5SuvbuGgPvqDL1T3moWls/oV5UN9XYk1.a'
   // const passwordDB = '$2b$10$vbT56furRMWD2mVhvKh5SuvbuGgPvqDL1T3moWls/oV5UN9XYk1.a'
 
-  // console.log(passwordDB);
   
   const valid = await authService.verifyPassword(
     password,

@@ -12,7 +12,7 @@ services:
     environment:
       NODE_ENV:       production
       ADMIN_USER:     ${ADMIN_USER:-admin}
-      ADMIN_PASSWORD:     ${ADMIN_PASSWORD:-cambiaresto}  # En producción.
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-cambiaresto}  # En producción.
       JWT_SECRET:     ${JWT_SECRET}
       PROJECTS_DIR:   ${PROJECTS_DIR:-/var/www}
       FRONTEND_URL:   ${FRONTEND_URL:-http://localhost:3000}
@@ -23,6 +23,8 @@ services:
       - /var/log/nginx:/var/log/nginx                  # logs nginx
       - /var/log/letsencrypt:/var/log/letsencrypt      # logs certbot
       - /var/run/docker.sock:/var/run/docker.sock      # control docker
+      - /proc:/proc:ro
+      - /sys:/sys:ro
     network_mode: host                                 # necesario para certbot y nginx reload
 
   frontend:

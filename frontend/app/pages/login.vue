@@ -1,41 +1,52 @@
 <script setup lang="ts">
-	definePageMeta({ layout: false })
+definePageMeta({ layout: false })
 
-	const auth = useAuthStore()
-	const loading = ref(false)
-	const form = reactive({ username: '', password: '' })
+const auth = useAuthStore()
+const loading = ref(false)
+const form = reactive({ username: '', password: '' })
 
-	async function handleLogin() {
-		loading.value = true
-		try {
-			await auth.login(form.username, form.password)
-		} finally {
-			loading.value = false
-		}
+async function handleLogin() {
+	loading.value = true
+	try {
+		await auth.login(form.username, form.password)
+	} finally {
+		loading.value = false
 	}
+}
 </script>
+
 <template>
 	<div class="min-h-screen flex items-center justify-center bg-gray-100">
 		<UCard class="w-full max-w-sm">
 			<template #header>
 				<h1 class="text-xl font-bold text-center">
-					Nginx Admin
+					SiteCore Manager
 				</h1>
 			</template>
 
-			<UForm :state="form"
+			<UForm
+				:state="form"
 				class="space-y-4"
-				@submit="handleLogin">
+				@submit="handleLogin"
+			>
 				<UFormField label="Usuario">
-					<UInput v-model="form.username" />
+					<UInput
+						v-model="form.username"
+						class="w-full"
+					/>
 				</UFormField>
 				<UFormField label="Contraseña">
-					<UInput v-model="form.password"
-						type="password" />
+					<UInput
+						v-model="form.password"
+						class="w-full"
+						type="password"
+					/>
 				</UFormField>
-				<UButton type="submit"
+				<UButton
+					type="submit"
 					block
-					:loading="loading">
+					:loading="loading"
+				>
 					Entrar
 				</UButton>
 			</UForm>

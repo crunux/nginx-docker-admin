@@ -1,5 +1,5 @@
 {
-	"name": "nginx-admin",
+	"name": "site-core",
   "version": "0.0.0-development",
   "description": "Panel de administración web para gestionar servidores Nginx",
   "private": true,

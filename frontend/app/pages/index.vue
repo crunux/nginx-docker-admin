@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<UPageHero description="The production-ready dashboard to handle domains,
+		<UPageHero
+			description="The production-ready dashboard to handle domains,
   real-time logs, and SSL certificates instantly."
 			:links="[{
 				label: 'Go Dashboard',
@@ -15,13 +16,15 @@
 				size: 'xl',
 				color: 'neutral',
 				variant: 'subtle'
-			}]">
+			}]"
+		>
 			<template #title>
-				<h1>Manage <span className="text-blue-600">Nginx & Docker</span></h1>
+				<h1>'<span className="text-blue-600">SiteCore</span>'</h1>
 			</template>
 		</UPageHero>
 
-		<UPageSection id="features"
+		<UPageSection
+			id="features"
 			title="Everything you need to manage your server"
 			description="Only deploy on server."
 			:features="[
@@ -55,10 +58,12 @@
 					title: 'Production-Ready Architecture',
 					description: 'Built for high-performance environments. Optimized for scale with audit logs, role-based access, and secure system-level integrations.'
 				}
-			]" />
+			]"
+		/>
 
 		<UPageSection>
-			<UPageCTA title="Ready to deploy your next tools?"
+			<UPageCTA
+				title="Ready to deploy your next tools?"
 				description="Join thousands of developers management with tools, easy nginx and docker orquetations. Get this tool and deploy."
 				variant="subtle"
 				:links="[{
@@ -74,7 +79,8 @@
 					icon: 'i-simple-icons-github',
 					color: 'neutral',
 					variant: 'outline'
-				}]" />
+				}]"
+			/>
 		</UPageSection>
 	</div>
 </template>

@@ -1,39 +1,39 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/eslint',
-    '@nuxt/ui',
-    '@nuxt/test-utils',
-    '@pinia/nuxt'
-  ],
-
-	runtimeConfig: {
-    public: {
-      apiUrl: import.meta.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
-      wsUrl:  import.meta.env.NUXT_PUBLIC_WS_URL  || 'ws://localhost:4001',
-    }
-  },
+	modules: [
+		'@nuxt/eslint',
+		'@nuxt/ui',
+		'@nuxt/test-utils',
+		'@pinia/nuxt'
+	],
 
 	ssr: false,
 
-  devtools: {
-    enabled: true
-  },
+	devtools: {
+		enabled: true
+	},
 
-  css: ['~/assets/css/main.css'],
+	css: ['~/assets/css/main.css'],
 
-  routeRules: {
-    '/': { prerender: true }
-  },
+	runtimeConfig: {
+		public: {
+			apiUrl: import.meta.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
+			wsUrl: import.meta.env.NUXT_PUBLIC_WS_URL || 'ws://localhost:4001'
+		}
+	},
 
-  compatibilityDate: '2025-01-15',
+	routeRules: {
+		'/': { prerender: true }
+	},
 
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
-  }
+	compatibilityDate: '2025-01-15',
+
+	eslint: {
+		config: {
+			stylistic: {
+				commaDangle: 'never',
+				braceStyle: '1tbs'
+			}
+		}
+	}
 })

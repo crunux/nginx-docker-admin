@@ -10,6 +10,8 @@ import { errorHandler } from './middleware/errorHandler'
 import { createWsServer } from './websocket/server'
 import { subdomainsRouter } from './routes/subdomains'
 import { systemRouter } from './routes/system'
+import { installRouter } from './routes/install'
+import { configRouter } from './routes/config'
 
 const app = express()
 
@@ -26,7 +28,9 @@ app.use('/api/ssl',    authMiddleware, sslRouter)
 app.use('/api/docker', authMiddleware, dockerRouter)
 app.use('/api/subdomains', authMiddleware, subdomainsRouter)
 app.use('/api/system', authMiddleware, systemRouter)
-
+app.use('/api/install', authMiddleware, installRouter)
+app.use('/api/config',  authMiddleware, configRouter)
+  
 app.use(errorHandler)
 
 app.listen(4000, () => console.log('API corriendo en :4000'))
