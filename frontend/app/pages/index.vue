@@ -1,25 +1,42 @@
+<script setup lang="ts">
+import type { ButtonProps } from '@nuxt/ui'
+
+definePageMeta({
+	layout: 'home'
+})
+
+const project = ref<{
+	name: string
+	description: string
+	links: ButtonProps[]
+}>({
+	name: '<SiteCore/>',
+	description: 'The production-ready dashboard to handle domains, real-time logs, and SSL certificates instantly.',
+	links: [{
+		label: 'Go Dashboard',
+		to: '/dashboard/sites',
+		// target: '_blank',
+		trailingIcon: 'i-lucide-monitor-cog',
+		size: 'xl'
+	}, {
+		label: 'Go Logs',
+		to: '/dashboard/logs',
+		icon: 'i-lucide-cog',
+		size: 'xl' as const,
+		color: 'neutral',
+		variant: 'subtle'
+	}]
+})
+</script>
+
 <template>
 	<div>
 		<UPageHero
-			description="The production-ready dashboard to handle domains,
-  real-time logs, and SSL certificates instantly."
-			:links="[{
-				label: 'Go Dashboard',
-				to: '/dashboard/sites',
-				// target: '_blank',
-				trailingIcon: 'i-lucide-monitor-cog',
-				size: 'xl'
-			}, {
-				label: 'Go Logs',
-				to: '/dashboard/logs',
-				icon: 'i-lucide-cog',
-				size: 'xl',
-				color: 'neutral',
-				variant: 'subtle'
-			}]"
+			:description="project.description"
+			:links="project.links"
 		>
 			<template #title>
-				<h1>'<span className="text-blue-600">SiteCore</span>'</h1>
+				<h1><span className="text-blue-600">{{ project.name }}</span></h1>
 			</template>
 		</UPageHero>
 

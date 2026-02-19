@@ -131,9 +131,9 @@ onMounted(loadSubdomains)
 		<!-- Header -->
 		<div class="flex items-center justify-between">
 			<div>
-				<h2 class="text-2xl font-bold">
+				<!-- <h2 class="text-2xl font-bold">
 					Subdominios
-				</h2>
+				</h2> -->
 				<p class="text-sm text-gray-500 mt-1">
 					{{ subdomains.length }} subdominio{{ subdomains.length !== 1 ? 's' : '' }} configurado{{ subdomains.length
 						!== 1 ? 's' : '' }}

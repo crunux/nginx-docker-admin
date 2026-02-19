@@ -36,3 +36,8 @@ export const formatStat = (key: string, value: SystemStats): string => {
 			return '—'
 	}
 }
+
+export const Capitalize = (str: string): string => {
+	if (!str) return ''
+	return str.charAt(0).toUpperCase() + str.slice(1)
+}
