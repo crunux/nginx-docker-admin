@@ -36,6 +36,7 @@ module.exports = {
         'docs',       // Documentación
         'config',     // Configuración general
         'tools',      // Herramientas de sistema server
+        'release',    // Cambios relacionados con el proceso de release
       ],
     ],
     'subject-case': [0],  // No forzar case

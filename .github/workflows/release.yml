@@ -24,6 +24,11 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      
+      - name: Fetch all tags and history
+        run: |
+          git fetch --prune --unshallow || git fetch --prune
+          git log -1 # Para verificar que hay un commit válido
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
